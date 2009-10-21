@@ -1,0 +1,63 @@
+<project name="org.osgi"
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+  <property file="build.properties"/>
+
+  <target name="load-ivy" depends="init-ivy">
+     <echo message="Loading Ivy"/>
+  </target>
+
+  <target name="resolve" depends="load-ivy"
+    description="--> resolve and retrieve dependencies with ivy">
+    <mkdir dir="${deps.dir}"/>
+    <ivy:resolve file="ivy.xml" log="${resolve.log}"/>
+    <ivy:retrieve pattern="${deps.dir}/[artifact].[ext]"
+             symlink="true" sync="true"/>
+    <!-- sync=true removes empty dir, so re-create it -->
+    <mkdir dir="${deps.dir}"/>
+  </target>
+
+  <target name="compile" depends="resolve"
+     description="--> compile the project">
+     <!-- uncomment the following to debug classpath -->
+     <!--pathconvert property="cp" refid="javac.classpath"/>
+     <echo>Classpath - ${cp}</echo-->
+     <mkdir dir="${classes.dir}" />
+     <javac srcdir="${src.dir}"
+            destdir="${classes.dir}"
+            classpathref="javac.classpath"
+            target="1.5"
+            debug="true" />
+  </target>
+
+  <target name="jar" depends="compile">
+    <sigil.bundle destpattern="${build.dir}/[id].[ext]"
+                 classpathref="run.path.id" />
+  </target>
+
+
+  <property name="ivy.jar.file" value="${cache.dir}/ivy.jar" />
+
+  <target name="download-ivy" unless="offline">
+    <mkdir dir="${cache.dir}"/>
+    <!-- ivy -->
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+         dest="${ivy.jar.file}" usetimestamp="true" verbose="true"/>
+  </target>
+
+  <target name="check-ivy">
+    <condition property="ivy.loaded">
+      <typefound name="ivy:retrieve" />
+    </condition>
+  </target>
+
+  <target name="init-ivy" depends="check-ivy" unless="ivy.loaded">
+    <antcall target="download-ivy" />
+    <!-- try to load ivy here from ivy home, in case the user has not already dropped
+         it into ant's lib dir (note that the latter copy will always take precedence).
+         We will not fail as long as local lib dir exists (it may be empty) and
+         ivy is in at least one of ant's lib dir or the local lib dir. -->
+    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+             uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.file}"/>
+
+  </target>
+</project>
