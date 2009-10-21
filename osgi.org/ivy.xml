@@ -5,12 +5,6 @@
         status="integration"/>
 
   <dependencies>
-    <!--dependency org="org.apache.felix" name="gogo" rev="0.2.0">
-      <artifact name="org.apache.felix.gogo.commands" type="jar" />
-      <artifact name="org.apache.felix.gogo.runtime" type="jar" />
-      <artifact name="org.apache.felix.gogo.console" type="jar" />
-    </dependency-->
-    <dependency org="org.apache.felix" name="org.apache.felix.framework" rev="2.0.1"/>
     <dependency org="org.osgi" name="org.osgi.core" rev="4.2.0"/>
     <dependency org="org.osgi" name="org.osgi.compendium" rev="4.2.0"/>
   </dependencies>

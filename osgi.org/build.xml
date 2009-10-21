@@ -1,12 +1,8 @@
-<project name="org.osgi"
+<project name="org.osgi" default="obr"
          xmlns:ivy="antlib:org.apache.ivy.ant">
   <property file="build.properties"/>
 
-  <target name="load-ivy" depends="init-ivy">
-     <echo message="Loading Ivy"/>
-  </target>
-
-  <target name="resolve" depends="load-ivy"
+  <target name="resolve" depends="init-ivy"
     description="--> resolve and retrieve dependencies with ivy">
     <mkdir dir="${deps.dir}"/>
     <ivy:resolve file="ivy.xml" log="${resolve.log}"/>
@@ -16,24 +12,18 @@
     <mkdir dir="${deps.dir}"/>
   </target>
 
-  <target name="compile" depends="resolve"
-     description="--> compile the project">
-     <!-- uncomment the following to debug classpath -->
-     <!--pathconvert property="cp" refid="javac.classpath"/>
-     <echo>Classpath - ${cp}</echo-->
-     <mkdir dir="${classes.dir}" />
-     <javac srcdir="${src.dir}"
-            destdir="${classes.dir}"
-            classpathref="javac.classpath"
-            target="1.5"
-            debug="true" />
+  <target name="obr" depends="resolve">
+    <bindex urlTemplate="http://repo2.maven.org/maven2/org/osgi/org.%s/4.2.0/org.%s-4.2.0.jar"
+            name="chronologicalthought.org"
+            repositoryFile="repository.xml">
+      <fileset dir="${deps.dir}" />
+    </bindex>
   </target>
 
-  <target name="jar" depends="compile">
-    <sigil.bundle destpattern="${build.dir}/[id].[ext]"
-                 classpathref="run.path.id" />
+  <target name="clean">
+    <delete dir="${deps.dir}"/>
+    <delete dir="${cache.dir}"/>
   </target>
-
 
   <property name="ivy.jar.file" value="${cache.dir}/ivy.jar" />
 
@@ -59,5 +49,7 @@
     <taskdef resource="org/apache/ivy/ant/antlib.xml"
              uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.file}"/>
 
+    <taskdef name="bindex"
+             classname="org.osgi.impl.bundle.bindex.ant.BindexTask" classpath="${bindex.jar}"/>
   </target>
 </project>
