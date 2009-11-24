@@ -1,0 +1,31 @@
+<ivysettings>
+    <properties file="${ivy.settings.dir}/build.properties"/>
+    <settings defaultResolver="chain"/>
+    <caches defaultCacheDir="${ivy.settings.dir}/cache/ivy" />
+
+    <typedef name="sigil-parser" classname="org.apache.felix.sigil.ivy.SigilParser" />
+    <typedef name="sigil-resolver" classname="org.apache.felix.sigil.ivy.SigilResolver" />
+
+    <parsers>
+        <sigil-parser/>
+    </parsers>
+
+    <resolvers>
+        <sigil-resolver name="sigil" config="${ivy.settings.dir}/sigil-repos.properties" />
+        <chain name="chain">
+          <filesystem name="local">
+            <artifact pattern="${repository.dir}/[artifact]-[revision].[ext]" />
+            <ivy pattern="${repository.dir}/[module]-[revision].xml" />
+          </filesystem>
+          <url name="maven" m2compatible="true">
+            <artifact pattern="http://repo1.maven.org/maven2/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision].[ext]"/>
+            <artifact pattern="http://repo1.maven.org/maven2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+          </url>
+        </chain>
+    </resolvers>
+
+    <modules>
+        <module organisation="sigil" name="*" resolver="sigil"/>
+        <module organisation="org.chronologicalthought" name="*" resolver="local"/>
+    </modules>
+</ivysettings>
