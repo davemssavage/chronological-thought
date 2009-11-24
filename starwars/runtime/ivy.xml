@@ -1,0 +1,9 @@
+<ivy-module version="1.0">
+  <info
+        organisation="org.chronologicalthought"
+        module="runtime"
+        status="integration"/>
+  <dependencies>
+     <dependency org="org.apache.felix" name="org.apache.felix.main" rev="2.0.1"/>
+  </dependencies>
+</ivy-module>

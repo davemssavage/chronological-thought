@@ -1,0 +1,118 @@
+<project name="starwars" default="dist"
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+  <property file="build.properties"/>
+
+  <target name="load-ivy" depends="init-sigil">
+     <echo message="Loading Ivy"/>
+     <ivy:settings file="ivysettings.xml" />
+  </target>
+
+  <target name="resolve" depends="load-ivy"
+    description="--> resolve and retrieve dependencies with ivy">
+    <mkdir dir="${deps.dir}"/>
+    <ivy:resolve file="ivy.xml" log="${resolve.log}"/>
+    <ivy:retrieve pattern="${deps.dir}/[artifact].[ext]"
+             symlink="true" sync="true"/>
+    <!-- sync=true removes empty dir, so re-create it -->
+    <mkdir dir="${deps.dir}"/>
+  </target>
+
+  <path id="javac.classpath">
+    <fileset dir="${deps.dir}" />
+  </path>
+
+  <path id="sigil.classpath">
+    <path refid="javac.classpath" />
+    <path location="${classes.dir}" />
+  </path>
+
+  <target name="compile" depends="resolve"
+     description="--> compile the project">
+     <mkdir dir="${classes.dir}" />
+     <javac srcdir="${src.dir}"
+            destdir="${classes.dir}"
+            classpathref="javac.classpath"
+            target="1.5"
+            debug="true" />
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${build.dir}" />
+    <sigil.bundle destpattern="${build.dir}/[id].[ext]"
+                 classpathref="sigil.classpath" />
+  </target>
+
+  <target name="install" depends="jar">
+    <tstamp>
+       <format property="now" pattern="yyyyMMddHHmmss"/>
+    </tstamp>
+    <mkdir dir="${repository.dir}"/>
+    <ivy:publish artifactspattern="${build.dir}/[artifact].[ext]"
+                 resolver="local"
+                 pubrevision="1.0.0"
+                 pubdate="${now}"
+                 forcedeliver="true"
+                 overwrite="true"
+                 status="integration"/>
+    <echo message="project ${ant.project.name} published locally with version ${local-version}" />
+  </target>
+
+  <target name="dist" depends="install">
+    <mkdir dir="${dist.dir}"/>
+    <ivy:retrieve organisation="org.chronologicalthought" module="starwars" revision="1.0.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
+    <ivy:retrieve organisation="sigil" module="org.apache.felix.gogo.runtime" revision="0.2.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
+    <ivy:retrieve organisation="sigil" module="org.apache.felix.gogo.commands" revision="0.2.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
+    <ivy:retrieve organisation="sigil" module="org.apache.felix.gogo.console" revision="0.2.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
+    <ivy:resolve file="runtime/ivy.xml" log="${resolve.log}"/>
+    <ivy:retrieve pattern="${dist.dir}/[artifact].[ext]" transitive="false"/>
+    <copy file="runtime/config.properties" todir="${dist.dir}/conf"/>
+  </target>
+
+  <target name="clean">
+     <delete dir="${build.dir}" />
+  </target>
+
+  <target name="download-deps" unless="offline">
+    <property name="deps.loaded" value="true"/>
+    <mkdir dir="${sigil.jar.dir}"/>
+    <!-- ivy -->
+    <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+         dest="${ivy.jar.file}" usetimestamp="true" verbose="true"/>
+    <!-- sigil -->
+    <get src="http://people.apache.org/~dsavage/sigil/sigil-ivy-plugin.jar"
+         dest="${sigil.jar.file}" usetimestamp="true" verbose="true"/>
+    <!-- bnd -->
+    <get src="http://www.aQute.biz/repo/biz/aQute/bndlib/${bnd.install.version}/bndlib-${bnd.install.version}.jar"
+         dest="${bnd.jar.file}" usetimestamp="true" verbose="true"/>
+    <!-- equinox.common -->
+    <get src=" http://download.eclipse.org/releases/${equinox.release}/plugins/org.eclipse.equinox.common_${equinox.install.version}.jar"
+         dest="${equinox.common.jar.file}" usetimestamp="true" verbose="true"/>
+  </target>
+
+  <target name="check-sigil">
+    <condition property="sigil.loaded">
+      <typefound name="sigil.bundle" />
+    </condition>
+  </target>
+
+  <target name="init-sigil" depends="check-sigil" unless="sigil.loaded">
+    <antcall target="download-deps" />
+    <!-- try to load ivy here from ivy home, in case the user has not already dropped
+         it into ant's lib dir (note that the latter copy will always take precedence).
+         We will not fail as long as local lib dir exists (it may be empty) and
+         ivy is in at least one of ant's lib dir or the local lib dir. -->
+    <path id="sigil.lib.path">
+      <fileset dir="${sigil.jar.dir}" includes="*.jar"/>
+    </path>
+
+    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+             uri="antlib:org.apache.ivy.ant" classpathref="sigil.lib.path"/>
+
+    <taskdef name="sigil.bundle"
+             classname="org.apache.felix.sigil.ant.BundleTask" classpathref="sigil.lib.path"/>
+
+    <taskdef name="sigil.bundle.info"
+             classname="org.apache.felix.sigil.ant.BundleInfoTask" classpathref="sigil.lib.path"/>
+
+  </target>
+</project>
