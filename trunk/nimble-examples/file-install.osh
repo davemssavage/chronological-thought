@@ -1,0 +1,16 @@
+// create a temporary array for storing ids
+array = new java.util.ArrayList;
+
+// iterate over the files passed in as arguement 1 to this script
+each (glob $1/*) {
+  // use the BundleContext.installBundle method to install each bundle
+  id=osgi:installBundle $it;
+  // store the bundle id for start later
+  $array add $id;
+};
+
+// iterate over our installed bundles
+each ($array) {
+  // use the BundleContext.start method to start it
+  osgi:start $it;
+};
