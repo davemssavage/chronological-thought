@@ -8,15 +8,15 @@ import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
-	@SuppressWarnings("unchecked")
-	public void start(BundleContext ctx) throws Exception {
-		Hashtable props = new Hashtable();
-		props.put(CommandProcessor.COMMAND_SCOPE, "starwars");
-		props.put(CommandProcessor.COMMAND_FUNCTION, new String[] { "play" } );
-		ctx.registerService(Starwars.class.getName(), new Starwars(), props);
-	}
+  @SuppressWarnings("unchecked")
+  public void start(BundleContext ctx) throws Exception {
+    Hashtable props = new Hashtable();
+    props.put(CommandProcessor.COMMAND_SCOPE, "ct");
+    props.put(CommandProcessor.COMMAND_FUNCTION, new String[] { "starwars" });
+    ctx.registerService(Starwars.class.getName(), new Starwars(), props);
+  }
 
-	public void stop(BundleContext ctx) throws Exception {
-	}
+  public void stop(BundleContext ctx) throws Exception {
+  }
 
 }
