@@ -1,0 +1,7 @@
+install = { installBundle $it };
+start = { (bundle $it) start };
+update = { (bundle $it) update };
+stop = { (bundle $it) stop };
+uninstall = { (bundle $it) uninstall };
+services = { allServiceReferences null null };
+
