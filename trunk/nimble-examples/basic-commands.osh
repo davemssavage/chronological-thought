@@ -1,7 +1,10 @@
-install = { installBundle $it };
-start = { (bundle $it) start };
-update = { (bundle $it) update };
-stop = { (bundle $it) stop };
-uninstall = { (bundle $it) uninstall };
-services = { allServiceReferences null null };
-
+install = { osgi:installBundle $it };
+start = { (bundle $it) osgi:start };
+update = { (bundle $it) osgi:update };
+stop = { (bundle $it) osgi:stop };
+uninstall = { (bundle $it) osgi:uninstall };
+services = { osgi:allServiceReferences null null };
+installAndStart = { 
+  id = install $it;
+  $id start
+};
