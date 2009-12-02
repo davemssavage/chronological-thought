@@ -1,4 +1,4 @@
-<project name="starwars" default="dist"
+<project name="starwars" default="jar"
          xmlns:ivy="antlib:org.apache.ivy.ant">
   <property file="build.properties"/>
 
@@ -42,33 +42,8 @@
                  classpathref="sigil.classpath" />
   </target>
 
-  <target name="install" depends="jar">
-    <tstamp>
-       <format property="now" pattern="yyyyMMddHHmmss"/>
-    </tstamp>
-    <mkdir dir="${repository.dir}"/>
-    <ivy:publish artifactspattern="${build.dir}/[artifact].[ext]"
-                 resolver="local"
-                 pubrevision="1.0.0"
-                 pubdate="${now}"
-                 forcedeliver="true"
-                 overwrite="true"
-                 status="integration"/>
-    <echo message="project ${ant.project.name} published locally with version ${local-version}" />
-  </target>
-
-  <target name="dist" depends="install">
-    <mkdir dir="${dist.dir}"/>
-    <ivy:retrieve organisation="org.chronologicalthought" module="starwars" revision="1.0.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
-    <ivy:retrieve organisation="sigil" module="org.apache.felix.gogo.runtime" revision="0.2.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
-    <ivy:retrieve organisation="sigil" module="org.apache.felix.gogo.commands" revision="0.2.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
-    <ivy:retrieve organisation="sigil" module="org.apache.felix.gogo.console" revision="0.2.0" inline="true" pattern="${dist.dir}/bundle/[artifact]_[revision].[ext]" transitive="false"/>
-    <ivy:resolve file="runtime/ivy.xml" log="${resolve.log}"/>
-    <ivy:retrieve pattern="${dist.dir}/[artifact].[ext]" transitive="false"/>
-    <copy file="runtime/config.properties" todir="${dist.dir}/conf"/>
-  </target>
-
   <target name="clean">
+     <delete dir="${classes.dir}" />
      <delete dir="${build.dir}" />
   </target>
 
