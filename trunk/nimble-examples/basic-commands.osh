@@ -3,11 +3,6 @@ start = { (osgi:bundle $it) start };
 update = { (osgi:bundle $it) update };
 stop = { (osgi:bundle $it) stop };
 uninstall = { (osgi:bundle $it) uninstall };
-services = { 
-  each ( osgi:allServiceReferences null null ) {
-    echo $it;
-  };
-};
 installAndStart = { 
   id = install $it;
   $id start
