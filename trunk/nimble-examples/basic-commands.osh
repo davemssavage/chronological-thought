@@ -5,9 +5,9 @@ stop = { (osgi:bundle $it) stop };
 uninstall = { (osgi:bundle $it) uninstall };
 services = { 
   each ( osgi:allServiceReferences null null ) {
-    echo $it
+    echo $it;
   };
- };
+};
 installAndStart = { 
   id = install $it;
   $id start
