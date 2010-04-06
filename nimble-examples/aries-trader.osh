@@ -1,21 +1,7 @@
 #!/usr/bin/env posh -s
-usage = [\
-  "aries-trader.osh - start and configure aries trader" \
-  "Usage: aries-trader [OPTIONS]" \
-  "  -v --verbose      Print debug information on resolution" \
-  "  -? --help         Print this debug message" \
-]
-
-opt = getopt $usage $args
-
-if {$opt isSet help} {\
-  $opt usage
-  exit
-}
 
 # declare closure to convert uri to file
 tofile = {\
- echo $it
  path = $it schemeSpecificPart 
  new File $path
 }
