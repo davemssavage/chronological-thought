@@ -9,17 +9,19 @@ activate = {\
 }
 
 dir = $PWD
-source = new URI $1/
-
-pom = tofile ($source resolve pom.xml)
 aries = tofile ($dir resolve aries.xml)
 
-if { not { $pom exists } } {\
-  echo Expected aries source directory
-  exit
-}
-
 if { not { $aries exists } } {\
+  echo Enter aries source location
+  read sourceDir
+  source = new URI $sourceDir/
+
+  pom = tofile ($source resolve pom.xml)
+  if { not { $pom exists } } {\
+    echo Expected aries source directory
+    exit
+  }
+
   index -viI .*target.*jar aries $source $aries
 }
 
