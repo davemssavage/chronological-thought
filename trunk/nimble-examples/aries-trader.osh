@@ -1,20 +1,11 @@
 #!/usr/bin/env posh -s
-
-# declare closure to convert uri to file
 tofile = {\
  path = $it schemeSpecificPart 
  new File $path
 }
 
-# declare closure to add active bundle
 activate = {\
-  b = $it
-  if {$opt isSet verbose} {\
-    echo Activating $b
-    nim add -p osgi.active.bundle/$b
-  } {\
-    nim add osgi.active.bundle/$b
-  }
+  nim add osgi.active.bundle/$it
 }
 
 dir = $PWD
@@ -35,7 +26,6 @@ if { not { $aries exists } } {\
 repos -l $aries
 repos -l ($0 resolve aries-rules.xml)
 repos -l springdm
-
 
 # trader bundles
 activate org.apache.aries.samples.ariestrader.util
