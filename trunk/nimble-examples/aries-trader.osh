@@ -1,0 +1,63 @@
+#!/usr/bin/env posh -s
+usage = [\
+  "aries-trader.osh - start and configure aries trader" \
+  "Usage: aries-trader [OPTIONS]" \
+  "  -v --verbose      Print debug information on resolution" \
+  "  -? --help         Print this debug message" \
+]
+
+opt = getopt $usage $args
+
+if {$opt isSet help} {\
+  $opt usage
+  exit
+}
+
+# declare closure to convert uri to file
+tofile = {\
+ echo $it
+ path = $it schemeSpecificPart 
+ new File $path
+}
+
+# declare closure to add active bundle
+activate = {\
+  b = $it
+  if {$opt isSet verbose} {\
+    echo Activating $b
+    nim add -p osgi.active.bundle/$b
+  } {\
+    nim add osgi.active.bundle/$b
+  }
+}
+
+dir = $PWD
+source = new URI $1/
+
+pom = tofile ($source resolve pom.xml)
+aries = tofile ($dir resolve aries.xml)
+
+if { not { $pom exists } } {\
+  echo Expected aries source directory
+  exit
+}
+
+if { not { $aries exists } } {\
+  index -viI .*target.*jar aries $source $aries
+}
+
+repos -l $aries
+repos -l ($0 resolve aries-rules.xml)
+repos -l springdm
+
+
+# trader bundles
+activate org.apache.aries.samples.ariestrader.util
+activate org.apache.aries.samples.ariestrader.core
+activate org.apache.aries.samples.ariestrader.beans
+activate org.apache.aries.samples.ariestrader.derby.ds
+activate org.apache.aries.samples.ariestrader.entities
+activate org.apache.aries.samples.ariestrader.persist.jdbc
+activate org.apache.aries.samples.ariestrader.persist.jpa.am
+activate org.apache.aries.samples.ariestrader.persist.jpa.cm
+activate org.apache.aries.samples.ariestrader.web

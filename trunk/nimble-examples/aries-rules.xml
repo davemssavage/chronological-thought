@@ -1,0 +1,30 @@
+<repository name="aries-rules:0" xmlns="http://schema.paremus.com/nri/1" uri="file:/Users/dave/development/apache/aries/jars/" >
+ <rule name="aries.osgi.service/blueprint:0.1.0.incubating.SNAPSHOT">
+  <req name="builder/primordial.builder" />
+  <req name="osgi.active.bundle/org.apache.aries.blueprint:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.transaction.blueprint:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.jpa.blueprint.aries:0.1.0.incubating.SNAPSHOT"/>
+  <cap name="aries.osgi.service/blueprint:0.1.0.incubating.SNAPSHOT" />
+  <cap name="osgi.service/blueprint.extender:0.0.0" />
+ </rule>
+ <rule name="aries.osgi.service/jta:0.1.0.incubating.SNAPSHOT">
+  <req name="builder/primordial.builder" />
+  <req name="osgi.active.bundle/org.apache.aries.transaction.manager:0.1.0.incubating.SNAPSHOT"/>
+  <cap name="aries.osgi.service/jta:0.1.0.incubating.SNAPSHOT" />
+  <cap name="osgi.service/jta.provider:0.0.0" />
+ </rule>
+ <rule name="aries.osgi.service/jndi:0.1.0.incubating.SNAPSHOT">
+  <req name="builder/primordial.builder" />
+  <req name="osgi.active.bundle/org.apache.aries.jndi:0.1.0.incubating.SNAPSHOT"/>
+  <cap name="aries.osgi.service/jndi:0.1.0.incubating.SNAPSHOT" />
+  <cap name="osgi.service/jndi.provider:0.0.0" />
+ </rule>
+ <rule name="aries.osgi.service/jpa:0.1.0.incubating.SNAPSHOT">
+  <req name="builder/primordial.builder" />
+  <req name="osgi.active.bundle/org.apache.aries.jpa.container:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.jpa.container.context:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.openjpa:2.0.0.beta2"/>
+  <cap name="aries.osgi.service/jpa.provider:0.1.0.incubating.SNAPSHOT" />
+  <cap name="osgi.service/jpa.provider:1.0.0" />
+ </rule>
+</repository>
