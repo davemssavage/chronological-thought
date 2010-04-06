@@ -8,8 +8,7 @@ activate = {\
   nim add osgi.active.bundle/$it
 }
 
-dir = $PWD
-aries = tofile ($dir resolve aries.xml)
+aries = tofile ($PWD resolve aries.xml)
 
 if { not { $aries exists } } {\
   echo Enter aries source location
