@@ -1,40 +1,39 @@
-#!/usr/bin/env posh -s
-tofile = {\
- path = $it schemeSpecificPart 
- new File $path
-}
+tofile = {
+ path = $it schemeSpecificPart;
+ new File $path;
+};
 
-activate = {\
-  nim add osgi.active.bundle/$it
-}
+activate = {
+  nim add osgi.active.bundle/$it;
+};
 
-aries = tofile ($PWD resolve aries.xml)
+aries = tofile ($PWD resolve aries.xml);
 
-if { not { $aries exists } } {\
-  echo Enter aries source location
-  read sourceDir
-  source = new URI $sourceDir/
+if { not { $aries exists } } {
+  echo Enter aries source location;
+  read sourceDir;
+  source = new URI $sourceDir/;
 
-  pom = tofile ($source resolve pom.xml)
-  if { not { $pom exists } } {\
-    echo Expected aries source directory
-    exit
-  }
+  pom = tofile ($source resolve pom.xml);
+  if { not { $pom exists } } {
+    echo Expected aries source directory;
+    exit;
+  };
 
-  index -viI .*target.*jar aries $source $aries
-}
+  index -viI .*target.*jar aries $source $aries;
+};
 
-repos -l $aries
-repos -l ($0 resolve aries-rules.xml)
-repos -l springdm
+repos -l $aries;
+repos -l ($0 resolve aries-rules.xml);
+repos -l springdm;
 
-# trader bundles
-activate org.apache.aries.samples.ariestrader.util
-activate org.apache.aries.samples.ariestrader.core
-activate org.apache.aries.samples.ariestrader.beans
-activate org.apache.aries.samples.ariestrader.derby.ds
-activate org.apache.aries.samples.ariestrader.entities
-activate org.apache.aries.samples.ariestrader.persist.jdbc
-activate org.apache.aries.samples.ariestrader.persist.jpa.am
-activate org.apache.aries.samples.ariestrader.persist.jpa.cm
-activate org.apache.aries.samples.ariestrader.web
+// trader bundles
+activate org.apache.aries.samples.ariestrader.util;
+activate org.apache.aries.samples.ariestrader.core;
+activate org.apache.aries.samples.ariestrader.beans;
+activate org.apache.aries.samples.ariestrader.derby.ds;
+activate org.apache.aries.samples.ariestrader.entities;
+activate org.apache.aries.samples.ariestrader.persist.jdbc;
+activate org.apache.aries.samples.ariestrader.persist.jpa.am;
+activate org.apache.aries.samples.ariestrader.persist.jpa.cm;
+activate org.apache.aries.samples.ariestrader.web;
