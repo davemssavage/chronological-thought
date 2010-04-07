@@ -7,10 +7,14 @@ activate = {
   nim add osgi.active.bundle/$it;
 };
 
+echo -------------------------------------------------;
+echo - Welcome to the AriesTrader sample application -;
+echo -------------------------------------------------;
+
 aries = tofile ($PWD resolve aries.xml);
 
 if { not { $aries exists } } {
-  echo Enter aries source location;
+  echo # Enter aries source location:;
   read sourceDir;
   source = new URI $sourceDir/;
 
@@ -37,3 +41,5 @@ activate org.apache.aries.samples.ariestrader.persist.jdbc;
 activate org.apache.aries.samples.ariestrader.persist.jpa.am;
 activate org.apache.aries.samples.ariestrader.persist.jpa.cm;
 activate org.apache.aries.samples.ariestrader.web;
+
+echo Connect to AriesTrader at http://localhost:8080/ariestrader;
