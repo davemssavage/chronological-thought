@@ -1,0 +1,14 @@
+<repository name="aries-trader-rules:0" xmlns="http://schema.paremus.com/nri/1" uri="file:/Users/dave/development/apache/aries/jars/" >
+ <rule name="aries.osgi.service/ariestrader:0.1.0.incubating.SNAPSHOT">
+  <req name="builder/primordial.builder" />
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.util:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.core:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.api:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.web:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.persist.jdbc:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.persist.jpa.am:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.persist.jpa.cm:0.1.0.incubating.SNAPSHOT"/>
+  <req name="osgi.active.bundle/org.apache.aries.samples.ariestrader.entities:0.1.0.incubating.SNAPSHOT"/>
+  <cap name="aries.osgi.service/ariestrader:0.1.0.incubating.SNAPSHOT" />
+ </rule>
+</repository>
