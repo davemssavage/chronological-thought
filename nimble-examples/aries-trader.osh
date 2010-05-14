@@ -7,9 +7,9 @@ activate = {
   nim add osgi.active.bundle/$it;
 };
 
-echo -------------------------------------------------;
-echo - Welcome to the AriesTrader sample application -;
-echo -------------------------------------------------;
+echo ----------------------------------;
+echo - AriesTrader sample application -;
+echo ----------------------------------;
 
 aries = tofile ($PWD resolve aries.xml);
 
