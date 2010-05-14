@@ -1,0 +1,67 @@
+// OSGi shell script to launch glassfish in Nimble
+// follows instructions found at http://weblogs.java.net/blog/ss141213/archive/2010/02/14/how-embed-glassfish-existing-osgi-runtime
+
+// converts a uri to a file
+tofile = {
+ path = $1 schemeSpecificPart;
+ new File $path;
+};
+
+// installs a bundle
+install = { 
+  b = $1; 
+  try { 
+    context:installBundle file:$b; 
+  } { 
+    echo failed to install $b;
+    $exception printStackTrace;
+  } 
+};
+
+// recursively installs all bundles in a directory
+installRecurse = {
+  file = $1;
+  if { $file isDirectory } {
+    each ( $file listFiles ) {
+      installRecurse $it;
+    };
+  } {
+    bundle = $file absolutePath;
+    if { $bundle . endsWith ".jar" } {
+      install $bundle;
+    };
+  };
+};
+
+// iterates over installed bundles and starts a named bundle
+startBundle = {
+  name = $1;
+  each ( context:bundles ) {
+    b = $it;
+    if { eq ($b symbolicName) $name } {
+      $b start;
+    };
+  };
+};
+
+gf = $1;
+gfi = new URI $gf/;
+modules = tofile ($gfi resolve modules/);
+domain = tofile ($gfi resolve domains/domain1/);
+
+if { not { $modules exists } } {
+  echo $gf is not a valid Glassfish installation;
+} {
+  echo Glassfish: $gf;
+  echo Modules: $modules;
+  echo Domain: $domain;
+
+  // install all bundles in modules directory
+  installRecurse $modules;
+
+  // set config admin properties
+  setpid com.sun.enterprise.glassfish.bootstrap.GlassFish com.sun.aas.installRoot=$gf com.sun.aas.instanceRoot=$domain;
+
+  // start glassfish
+  startBundle org.glassfish.core.glassfish;
+};
