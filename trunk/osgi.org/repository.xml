@@ -1,6 +1,6 @@
 
 <repository lastmodified='20091021032132.732' name='chronologicalthought.org'>
-  <resource id='osgi.cmpn/4.2.0.200908310645' presentationname='osgi.cmpn' symbolicname='osgi.cmpn' uri='http://repo2.maven.org/maven2/org/osgi/org.osgi.cmpn/4.2.0/org.osgi.cmpn-4.2.0.jar' version='4.2.0.200908310645'>
+  <resource id='osgi.compendium/4.2.0.200908310645' presentationname='osgi.compendium' symbolicname='osgi.compendium' uri='http://repo2.maven.org/maven2/org/osgi/org.osgi.compendium/4.2.0/org.osgi.compendium-4.2.0.jar' version='4.2.0.200908310645'>
     <description>
       OSGi Service Platform Release 4 Version 4.2, Compendium Interfaces
        and Classes for use in compiling bundles.
@@ -17,8 +17,8 @@
     </copyright>
     <capability name='bundle'>
       <p n='manifestversion' v='2'/>
-      <p n='presentationname' v='osgi.cmpn'/>
-      <p n='symbolicname' v='osgi.cmpn'/>
+      <p n='presentationname' v='osgi.compendium'/>
+      <p n='symbolicname' v='osgi.compendium'/>
       <p n='version' t='version' v='4.2.0.200908310645'/>
     </capability>
     <capability name='package'>
