@@ -1,0 +1,1 @@
+This project contains the source code as referred to in the http://chronological-thought.blogspot.com/ blog.
